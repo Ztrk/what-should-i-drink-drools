@@ -1,5 +1,7 @@
 package com.drinks;
 
+import javax.swing.JOptionPane;
+
 import org.kie.api.KieServices;
 import org.kie.api.logger.KieRuntimeLogger;
 import org.kie.api.runtime.KieContainer;
@@ -19,10 +21,6 @@ public class Drinks {
             KieRuntimeLogger kLogger = ks.getLoggers().newFileLogger(kSession, "drinks-log");
 
             // go !
-            Message message = new Message();
-            message.setMessage("Hello World");
-            message.setStatus(Message.HELLO);
-            kSession.insert(message);
             kSession.fireAllRules();
             kLogger.close();
         }
@@ -31,31 +29,8 @@ public class Drinks {
         }
     }
 
-    public static class Message {
-
-        public static final int HELLO = 0;
-        public static final int GOODBYE = 1;
-
-        private String message;
-
-        private int status;
-
-        public String getMessage() {
-            return this.message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
-
-        public int getStatus() {
-            return this.status;
-        }
-
-        public void setStatus(int status) {
-            this.status = status;
-        }
-
+    public static final boolean ask(String question) {
+        int answer = JOptionPane.showConfirmDialog(null, question, "Select an Option", JOptionPane.YES_NO_OPTION);
+        return answer == 0;
     }
-
 }

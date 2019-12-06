@@ -1,20 +1,38 @@
 package com.drinks.rules
- 
-import com.drinks.Drinks.Message;
- 
-rule "Hello World"
-    when
-        m : Message( status == Message.HELLO, myMessage : message )
-    then
-        System.out.println( myMessage );
-        m.setMessage( "Goodbye cruel world" );
-        m.setStatus( Message.GOODBYE );
-        update( m );
+
+import com.drinks.Drinks;
+
+declare Fact
+    name : String
+    truthValue : Boolean
 end
 
-rule "GoodBye"
+declare Drink
+    name : String
+end
+ 
+rule "In Mexico"
     when
-        Message( status == Message.GOODBYE, myMessage : message )
+
     then
-        System.out.println( myMessage );
+        Fact fact = new Fact("in_mexico", false);
+        boolean answer = Drinks.ask("Are you in mexico?");
+        fact.setTruthValue(answer);
+        insert(fact);
+end
+
+rule "Drink in mexico"
+    when
+        Fact(name == "in_mexico", truthValue == true)
+    then
+        System.out.println("You are in mexico");
+        insert(new Drink("jarritos"));
+end
+
+rule "Drink not in mexico"
+    when
+        Fact(name == "in_mexico", truthValue == false)
+    then
+        System.out.println("You are not in mexico");
+        insert(new Drink("not_in_mexico"));
 end
