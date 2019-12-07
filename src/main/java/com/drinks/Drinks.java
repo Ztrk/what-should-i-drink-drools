@@ -45,18 +45,23 @@ public class Drinks extends Application {
             t.printStackTrace();
         }
     }
-
+    
     public void ask(String question, String factName) throws InstantiationException, IllegalAccessException {
         KieBase kBase = kSession.getKieBase();
+        FactType answerEnum = kBase.getFactType("com.drinks.rules", "Answer");
+        Class<? extends Enum> answerClass = answerEnum.getFactClass().asSubclass(Enum.class);
+        Object yesAnswer = Enum.valueOf(answerClass, "YES");
+        Object noAnswer = Enum.valueOf(answerClass, "NO");
+
         FactType factType = kBase.getFactType("com.drinks.rules", "Fact");
         Object fact = factType.newInstance();
         factType.set(fact, "name", factName);
-        factType.set(fact, "truthValue", false);
+        factType.set(fact, "answer", noAnswer);
 
         Alert alert = new Alert(AlertType.CONFIRMATION, question, ButtonType.YES, ButtonType.NO);
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.YES) {
-            factType.set(fact, "truthValue", true);
+            factType.set(fact, "answer", yesAnswer);
         }
         kSession.insert(fact);
     }

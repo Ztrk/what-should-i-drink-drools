@@ -6,9 +6,13 @@ import com.drinks.Drinks;
 
 global Drinks drinksApp;
 
+declare enum Answer
+    YES, NO;
+end
+
 declare Fact
     name : String
-    truthValue : Boolean
+    answer : Answer
 end
 
 declare Drink
@@ -24,14 +28,14 @@ end
 
 rule "PwN nOoBs"
     when
-        Fact(name == "in_mexico", truthValue == false)
+        Fact(name == "in_mexico", answer == Answer.NO)
     then
         drinksApp.ask("Do you PwN nOoBs?", "pwn_noobs");
 end
 
 rule "Drink in mexico"
     when
-        Fact(name == "in_mexico", truthValue == true)
+        Fact(name == "in_mexico", answer == Answer.YES)
     then
         List<Object> drinks = new ArrayList<>();
         drinks.add(new Drink("Jarritos"));
@@ -40,7 +44,7 @@ end
 
 rule "Drink PwN nOoBs"
     when
-        Fact(name == "pwn_noobs", truthValue == true)
+        Fact(name == "pwn_noobs", answer == Answer.YES)
     then
         List<Object> drinks = new ArrayList<>();
         drinks.add(new Drink("Mountian Dew code red"));
