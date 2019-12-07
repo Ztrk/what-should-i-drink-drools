@@ -1,6 +1,10 @@
 package com.drinks.rules
 
+import java.util.List;
+import java.util.ArrayList;
 import com.drinks.Drinks;
+
+global Drinks drinksApp;
 
 declare Fact
     name : String
@@ -13,38 +17,35 @@ end
  
 rule "In Mexico"
     when
-
+        // Empty
     then
-        Fact fact = new Fact("in_mexico", false);
-        boolean answer = Drinks.ask("Are you in mexico?");
-        fact.setTruthValue(answer);
-        insert(fact);
+        drinksApp.ask("Are you in mexico?", "in_mexico");
 end
 
 rule "PwN nOoBs"
     when
         Fact(name == "in_mexico", truthValue == false)
     then
-        Fact fact = new Fact("pwn_noobs", false);
-        boolean answer = Drinks.ask("Do you PwN nOoBs?");
-        fact.setTruthValue(answer);
-        insert(fact);
+        drinksApp.ask("Do you PwN nOoBs?", "pwn_noobs");
 end
 
 rule "Drink in mexico"
     when
         Fact(name == "in_mexico", truthValue == true)
     then
-        System.out.println("You are in mexico");
-        insert(new Drink("Jarritos"));
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Jarritos"));
+        drinksApp.presentResults(drinks);
 end
 
 rule "Drink PwN nOoBs"
     when
         Fact(name == "pwn_noobs", truthValue == true)
     then
-        System.out.println("You PwN nOoBs");
-        insert(new Drink("Mountian Dew code red"));
-        insert(new Drink("Jolt cola"));
-        insert(new Drink("Mello yello"));
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Mountian Dew code red"));
+        drinks.add(new Drink("Something blue"));
+        drinks.add(new Drink("Jolt cola"));
+        drinks.add(new Drink("Mello yello"));
+        drinksApp.presentResults(drinks);
 end

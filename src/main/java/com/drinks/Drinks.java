@@ -1,18 +1,26 @@
 package com.drinks;
 
-import javax.swing.JOptionPane;
+import java.util.List;
+import java.util.Optional;
 
+import org.kie.api.KieBase;
 import org.kie.api.KieServices;
+import org.kie.api.definition.type.FactType;
 import org.kie.api.logger.KieRuntimeLogger;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import javafx.application.Application;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 /**
  * This is a sample class to launch a rule.
  */
 public class Drinks extends Application {
+    
+    private KieSession kSession;
 
     public static final void main(String[] args) {
         launch();
@@ -25,10 +33,11 @@ public class Drinks extends Application {
             // load up the knowledge base
             KieServices ks = KieServices.Factory.get();
             KieContainer kContainer = ks.getKieClasspathContainer();
-            KieSession kSession = kContainer.newKieSession("ksession-rules");
+            kSession = kContainer.newKieSession("ksession-rules");
             KieRuntimeLogger kLogger = ks.getLoggers().newFileLogger(kSession, "drinks-log");
 
             // go !
+            kSession.setGlobal("drinksApp", this);
             kSession.fireAllRules();
             kLogger.close();
         }
@@ -37,9 +46,33 @@ public class Drinks extends Application {
         }
     }
 
-    public static final boolean ask(String question) {
-        int answer = JOptionPane.showConfirmDialog(null, question, "Select an Option", JOptionPane.YES_NO_OPTION);
-        return answer == 0;
+    public void ask(String question, String factName) throws InstantiationException, IllegalAccessException {
+        KieBase kBase = kSession.getKieBase();
+        FactType factType = kBase.getFactType("com.drinks.rules", "Fact");
+        Object fact = factType.newInstance();
+        factType.set(fact, "name", factName);
+        factType.set(fact, "truthValue", false);
+
+        Alert alert = new Alert(AlertType.CONFIRMATION, question, ButtonType.YES, ButtonType.NO);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.YES) {
+            factType.set(fact, "truthValue", true);
+        }
+        kSession.insert(fact);
+    }
+    
+    public void presentResults(List<Object> drinks) {
+        KieBase kBase = kSession.getKieBase();
+        FactType drinkType = kBase.getFactType("com.drinks.rules", "Drink");
+        
+        StringBuilder message = new StringBuilder("Drinks for you:\n");
+        for (Object drink : drinks) {
+            message.append("- ");
+            message.append(drinkType.get(drink, "name"));
+            message.append("\n");
+        }
+        Alert alert = new Alert(AlertType.INFORMATION, message.toString());
+        alert.showAndWait();
     }
 
 }
