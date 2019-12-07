@@ -21,18 +21,30 @@ rule "In Mexico"
         insert(fact);
 end
 
+rule "PwN nOoBs"
+    when
+        Fact(name == "in_mexico", truthValue == false)
+    then
+        Fact fact = new Fact("pwn_noobs", false);
+        boolean answer = Drinks.ask("Do you PwN nOoBs?");
+        fact.setTruthValue(answer);
+        insert(fact);
+end
+
 rule "Drink in mexico"
     when
         Fact(name == "in_mexico", truthValue == true)
     then
         System.out.println("You are in mexico");
-        insert(new Drink("jarritos"));
+        insert(new Drink("Jarritos"));
 end
 
-rule "Drink not in mexico"
+rule "Drink PwN nOoBs"
     when
-        Fact(name == "in_mexico", truthValue == false)
+        Fact(name == "pwn_noobs", truthValue == true)
     then
-        System.out.println("You are not in mexico");
-        insert(new Drink("not_in_mexico"));
+        System.out.println("You PwN nOoBs");
+        insert(new Drink("Mountian Dew code red"));
+        insert(new Drink("Jolt cola"));
+        insert(new Drink("Mello yello"));
 end
