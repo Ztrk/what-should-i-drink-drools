@@ -34,7 +34,8 @@ public class Drinks extends Application {
     private KieSession kSession;
     private ArrayList<FactHandle> facts = new ArrayList<>();
     private ArrayList<String> toShow = new ArrayList<>();
-
+    private int winSize=400;
+    
     public static final void main(String[] args) {
         launch();
     }
@@ -63,7 +64,7 @@ public class Drinks extends Application {
     //ArrayList<FactHandle> facts=new ArrayList<>();
     //ArrayList<String> toShow=new ArrayList<>();
     ArrayList<String> queries=new ArrayList<>();
-    ArrayList<Boolean> answers=new ArrayList<>();
+    ArrayList<Object> answers=new ArrayList<>();
     public void ask(String question, String factName) throws InstantiationException, IllegalAccessException {
         // Basic preprocessing of facts and rules
         KieBase kBase = kSession.getKieBase();
@@ -93,14 +94,14 @@ public class Drinks extends Application {
         buttonYes.setTranslateX(-60);
         buttonNo.setTranslateX(-20);
         buttonReturn.setTranslateX(30);
-        buttonYes.setTranslateY(100);
-        buttonNo.setTranslateY(100);
-        buttonReturn.setTranslateY(100);
+        buttonYes.setTranslateY(140);
+        buttonNo.setTranslateY(140);
+        buttonReturn.setTranslateY(140);
         message.setTranslateY(50);
-        message2.setTranslateY(-140);
+        message2.setTranslateY(-170);
         answerList.setTranslateY(-50);
-        answerList.setMaxWidth(300);
-        answerList.setMaxHeight(150);
+        answerList.setMaxWidth(winSize);
+        answerList.setMaxHeight(160);
         
         Stage thisStage=new Stage();
         //Events when firing buttons: yes and no
@@ -111,7 +112,7 @@ public class Drinks extends Application {
             	factType.set(fact, "answer", yesAnswer);
             	toShow.add(question+", Answer: Yes");
             	facts.add(kSession.insert(fact));
-            	answers.add(true);
+            	answers.add(yesAnswer);
             	thisStage.close();
             }
         });
@@ -122,7 +123,7 @@ public class Drinks extends Application {
             	queries.add(factName);
             	toShow.add(question+", Answer: No");
             	facts.add(kSession.insert(fact));
-            	answers.add(false);
+            	answers.add(noAnswer);
             	thisStage.close();
             }
         });
@@ -130,25 +131,35 @@ public class Drinks extends Application {
         buttonReturn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-            	toShow.add(question+", Answer: Perhaps");
-            	kSession.delete(facts.get(facts.size()-1));
-            	kSession.delete(facts.get(facts.size()-2));
-            	System.out.println(String.valueOf(facts.size())+"  "+String.valueOf(queries.size())+"  "+String.valueOf(answers.size()));
+            	System.out.println(String.valueOf(facts.size())+"  "+String.valueOf(queries.size())+"  "+String.valueOf(answers.size())+"  "+String.valueOf(toShow.size()));
+            	int point=1, pos;
+            	if (null!=answerList.getSelectionModel().getSelectedItem()) {
+            		String xstr=answerList.getSelectionModel().getSelectedItem();
+            		pos=toShow.indexOf(xstr);
+            		point=facts.size()-pos;
+            	}
+            	if (facts.size()>point) {
             	
-            	Object vv;
-            	if (answers.get(answers.size()-2)==true) vv=yesAnswer;
-                else vv=noAnswer;
-                factType.set(fct, "name", queries.get(queries.size()-2));
-                factType.set(fct, "answer", vv);
-                answers.remove(answers.get(answers.size()-1));
-                queries.remove(queries.get(queries.size()-1));
-                facts.remove(facts.get(facts.size()-1));
-                
-                System.out.println(String.valueOf(facts.size())+"  "+String.valueOf(queries.size())+"  "+String.valueOf(answers.size()));
-            	kSession.insert(fct);
-            	thisStage.close();
+	            	for (int i=0;i<point;i++) {
+		            	toShow.remove(toShow.size()-1);
+		            	kSession.delete(facts.get(facts.size()-1));
+		                answers.remove(answers.size()-1);
+		                queries.remove(queries.size()-1);
+		                facts.remove(facts.size()-1);
+	            	}
+	                
+	                kSession.delete(facts.get(facts.size()-1));
+	                facts.remove(facts.size()-1);
+	            	factType.set(fct, "name", queries.get(queries.size()-1));
+	                factType.set(fct, "answer", answers.get(answers.size()-1));
+	                
+	                facts.add(kSession.insert(fct));
+	            	thisStage.close();
+            	}
             }
         });
+        
+        
         //Creating window
         StackPane layout=new StackPane();
         layout.getChildren().add(buttonYes);
@@ -157,25 +168,99 @@ public class Drinks extends Application {
         layout.getChildren().add(message);
         layout.getChildren().add(message2);
         layout.getChildren().add(answerList);
-        Scene skene=new Scene(layout, 300, 300);
+        Scene skene=new Scene(layout, winSize, winSize);
         thisStage.setTitle("Question");
         thisStage.setScene(skene);
         //Waiting for player's (?) move
         thisStage.showAndWait();
     }
     
-    public void presentResults(List<Object> drinks) {
+    public void presentResults(List<Object> drinks) throws InstantiationException, IllegalAccessException {
+    	// Basic preprocessing of facts and rules
         KieBase kBase = kSession.getKieBase();
         FactType drinkType = kBase.getFactType("com.drinks.rules", "Drink");
 
-        StringBuilder message = new StringBuilder("Drinks for you:\n");
-        for (Object drink : drinks) {
-            message.append("- ");
-            message.append(drinkType.get(drink, "name"));
-            message.append("\n");
+        FactType factType = kBase.getFactType("com.drinks.rules", "Fact");
+        Object fct = factType.newInstance();
+        //Creating buttons, message and list that will be displayed
+        ListView <String> answerList=new ListView<String>();
+        Button buttonReturn=new Button("Return");
+        Text message2 = new Text("Answers up to now. If You want to return to the last question, just press Return. If You want to return to even earlier question, click on it on the list and then"
+        		+ " press Return");
+        
+        String ancientWisdom="";
+        for (int i=0;i<drinks.size();i++) {
+        	Object x=drinks.get(i);
+        	ancientWisdom+=drinkType.get(x, "name");
+        	if (i<drinks.size()-1) {
+        		ancientWisdom+=" or ";
+        	}
         }
-        Alert alert = new Alert(AlertType.INFORMATION, message.toString());
-        alert.showAndWait();
+        
+        Text message = new Text("So, we've come to it! At last I know, that You should probably drink "+ancientWisdom+". If it doesn't suit You, You can always return!");
+        //Constructing list of previous answers
+        for (String x: toShow) {
+        	answerList.getItems().add(x);
+        }
+        
+        //Changing positions, where things will be displayed
+        buttonReturn.setTranslateY(140);
+        message.setTranslateY(70);
+        message2.setTranslateY(-160);
+        answerList.setTranslateY(-50);
+        message.setTranslateX(20);
+        message2.setTranslateX(20);
+        answerList.setMaxWidth(winSize);
+        answerList.setMaxHeight(160);
+        
+        message.setWrappingWidth(winSize-20);
+        message2.setWrappingWidth(winSize-20);
+        
+        Stage thisStage=new Stage();
+                
+        buttonReturn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            	System.out.println(String.valueOf(facts.size())+"  "+String.valueOf(queries.size())+"  "+String.valueOf(answers.size())+"  "+String.valueOf(toShow.size()));
+            	int point=1, pos;
+            	if (null!=answerList.getSelectionModel().getSelectedItem()) {
+            		String xstr=answerList.getSelectionModel().getSelectedItem();
+            		pos=toShow.indexOf(xstr);
+            		point=facts.size()-pos;
+            	}
+            	if (facts.size()>point) {
+            	
+	            	for (int i=0;i<point;i++) {
+		            	toShow.remove(toShow.size()-1);
+		            	kSession.delete(facts.get(facts.size()-1));
+		                answers.remove(answers.size()-1);
+		                queries.remove(queries.size()-1);
+		                facts.remove(facts.size()-1);
+	            	}
+	                
+	                kSession.delete(facts.get(facts.size()-1));
+	                facts.remove(facts.size()-1);
+	            	factType.set(fct, "name", queries.get(queries.size()-1));
+	                factType.set(fct, "answer", answers.get(answers.size()-1));
+	                
+	                facts.add(kSession.insert(fct));
+	            	thisStage.close();
+            	}
+            }
+        });
+        
+        
+        //Creating window
+        StackPane layout=new StackPane();
+        layout.getChildren().add(buttonReturn);
+        layout.getChildren().add(message);
+        layout.getChildren().add(message2);
+        layout.getChildren().add(answerList);
+        Scene skene=new Scene(layout, winSize, winSize);
+        thisStage.setTitle("Question");
+        thisStage.setScene(skene);
+        //Waiting for player's (?) move
+        thisStage.showAndWait();
     }
 
 }
