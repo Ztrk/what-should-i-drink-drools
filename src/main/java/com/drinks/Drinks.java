@@ -30,7 +30,7 @@ import javafx.stage.Stage;
  * This is a sample class to launch a rule.
  */
 public class Drinks extends Application {
-
+    
     private KieSession kSession;
     private ArrayList<FactHandle> facts = new ArrayList<>();
     private ArrayList<String> toShow = new ArrayList<>();
@@ -58,7 +58,12 @@ public class Drinks extends Application {
             t.printStackTrace();
         }
     }
-
+    
+    
+    //ArrayList<FactHandle> facts=new ArrayList<>();
+    //ArrayList<String> toShow=new ArrayList<>();
+    ArrayList<String> queries=new ArrayList<>();
+    ArrayList<Boolean> answers=new ArrayList<>();
     public void ask(String question, String factName) throws InstantiationException, IllegalAccessException {
         // Basic preprocessing of facts and rules
         KieBase kBase = kSession.getKieBase();
@@ -69,65 +74,96 @@ public class Drinks extends Application {
 
         FactType factType = kBase.getFactType("com.drinks.rules", "Fact");
         Object fact = factType.newInstance();
+        Object fct = factType.newInstance();
         factType.set(fact, "name", factName);
-        factType.set(fact, "answer", noAnswer);
-
-        // Creating buttons, message and list that will be displayed
-        ListView<String> answerList = new ListView<String>();
-        Button buttonYes = new Button("Yes");
-        Button buttonNo = new Button("No");
+        factType.set(fact, "answer", noAnswer);       
+        //Creating buttons, message and list that will be displayed
+        ListView <String> answerList=new ListView<String>();
+        Button buttonYes=new Button("Yes");
+        Button buttonNo=new Button("No");
+        Button buttonReturn=new Button("Return");
         Text message = new Text(question);
         Text message2 = new Text("Answers up to now:");
-        // Constructing list of previous answers
-        for (String x : toShow) {
-            answerList.getItems().add(x);
+        //Constructing list of previous answers
+        for (String x: toShow) {
+        	answerList.getItems().add(x);
         }
-
-        // Changing positions, where things will be displayed
-        buttonYes.setTranslateX(-20);
-        buttonNo.setTranslateX(20);
+        
+        //Changing positions, where things will be displayed
+        buttonYes.setTranslateX(-60);
+        buttonNo.setTranslateX(-20);
+        buttonReturn.setTranslateX(30);
         buttonYes.setTranslateY(100);
         buttonNo.setTranslateY(100);
+        buttonReturn.setTranslateY(100);
         message.setTranslateY(50);
         message2.setTranslateY(-140);
         answerList.setTranslateY(-50);
         answerList.setMaxWidth(300);
         answerList.setMaxHeight(150);
-
-        Stage thisStage = new Stage();
-        // Events when firing buttons: yes and no
+        
+        Stage thisStage=new Stage();
+        //Events when firing buttons: yes and no
         buttonYes.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                factType.set(fact, "answer", yesAnswer);
-                toShow.add(question + ", Answer: Yes");
-                facts.add(kSession.insert(fact));
-                thisStage.close();
+            	queries.add(factName);
+            	factType.set(fact, "answer", yesAnswer);
+            	toShow.add(question+", Answer: Yes");
+            	facts.add(kSession.insert(fact));
+            	answers.add(true);
+            	thisStage.close();
             }
         });
-
+        
         buttonNo.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                factType.set(fact, "answer", noAnswer);
-                toShow.add(question + ", Answer: No");
-                facts.add(kSession.insert(fact));
-                thisStage.close();
+            	queries.add(factName);
+            	toShow.add(question+", Answer: No");
+            	facts.add(kSession.insert(fact));
+            	answers.add(false);
+            	thisStage.close();
             }
         });
-        // Creating window
-        StackPane layout = new StackPane();
+        
+        buttonReturn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            	toShow.add(question+", Answer: Perhaps");
+            	kSession.delete(facts.get(facts.size()-1));
+            	kSession.delete(facts.get(facts.size()-2));
+            	System.out.println(String.valueOf(facts.size())+"  "+String.valueOf(queries.size())+"  "+String.valueOf(answers.size()));
+            	
+            	Object vv;
+            	if (answers.get(answers.size()-2)==true) vv=yesAnswer;
+                else vv=noAnswer;
+                factType.set(fct, "name", queries.get(queries.size()-2));
+                factType.set(fct, "answer", vv);
+                answers.remove(answers.get(answers.size()-1));
+                queries.remove(queries.get(queries.size()-1));
+                facts.remove(facts.get(facts.size()-1));
+                
+                System.out.println(String.valueOf(facts.size())+"  "+String.valueOf(queries.size())+"  "+String.valueOf(answers.size()));
+            	kSession.insert(fct);
+            	thisStage.close();
+            }
+        });
+        //Creating window
+        StackPane layout=new StackPane();
         layout.getChildren().add(buttonYes);
         layout.getChildren().add(buttonNo);
+        layout.getChildren().add(buttonReturn);
         layout.getChildren().add(message);
         layout.getChildren().add(message2);
         layout.getChildren().add(answerList);
-        Scene skene = new Scene(layout, 300, 300);
+        Scene skene=new Scene(layout, 300, 300);
+        thisStage.setTitle("Question");
         thisStage.setScene(skene);
-        // Waiting for player's (?) move
+        //Waiting for player's (?) move
         thisStage.showAndWait();
     }
-
+    
     public void presentResults(List<Object> drinks) {
         KieBase kBase = kSession.getKieBase();
         FactType drinkType = kBase.getFactType("com.drinks.rules", "Drink");
