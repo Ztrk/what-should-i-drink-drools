@@ -61,3 +61,246 @@ rule "Drinks need a boost"
         drinks.add(new Drink("Coca-Cola Diet"));
         drinksApp.presentResults(drinks);
 end
+
+rule "Drinks animated"
+    when
+        Fact(name == "animated", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Cactus Cooler"));
+        drinks.add(new Drink("Buzz Cola"));
+        drinks.add(new Drink("Slurm"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks juggalo"
+    when
+        Fact(name == "juggalo", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Faygo"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks aftertaste of dirt"
+    when
+        Fact(name == "aftertaste_of_dirt", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Pepsi Jazz"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks Tay Zonday"
+    when
+        Fact(name == "tay_zonday", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Dr Pepper Cherry Chocolate"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks in Brazil"
+    when
+        Fact(name == "in_brazil", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Guarana Antarctica"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks on the dole"
+    when
+        Fact(name == "on_the_dole", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Safeway Soda"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks flux capacitor"
+    when
+        Fact(name == "flux_capacitor", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Tab"));
+        drinks.add(new Drink("Hubba Bubba"));
+        drinks.add(new Drink("Crystal Pepsi"));
+        drinks.add(new Drink("Coca-Cola Blak"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks bubble gum"
+    when
+        Fact(name == "bubble_gum", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Inca Kola"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks all-nighter"
+    when
+        Fact(name == "all_nighter", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Vault"));
+        drinks.add(new Drink("Pepsi Max"));
+        drinks.add(new Drink("Red Bull Cola"));
+        drinks.add(new Drink("Josta"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks shopping at Tesco"
+    when
+        Fact(name == "shopping_at_tesco", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Qibla Cola"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks at a picnic"
+    when
+        Fact(name == "at_a_picnic", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Contry Time"));
+        drinks.add(new Drink("Squirt"));
+        drinks.add(new Drink("Dad's Root Beer"));
+        drinks.add(new Drink("Sunkist"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks buy any of these"
+    when
+        Fact(name == "buy_any_of_these", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Pennsylvania Dutch Birch Beer"));
+        drinks.add(new Drink("Moxie"));
+        drinks.add(new Drink("Ale-8-One"));
+        drinks.add(new Drink("Dublin Dr Pepper"));
+        drinks.add(new Drink("Cheerwine"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks enjoy Tyler Perry"
+    when
+        Fact(name == "enjoy_tyler_perry", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Welch's Soda"));
+        drinks.add(new Drink("Fanta Grape"));
+        drinks.add(new Drink("Big Red"));
+        drinks.add(new Drink("Crush"));
+        drinks.add(new Drink("Hawaiian Punch"));
+        drinks.add(new Drink("Fanta Orange"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks no quality root beer"
+    when
+        Fact(name == "quality_root_beer", answer == Answer.NO)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("A&W Root Beer"));
+        drinks.add(new Drink("Barq's Root Beer"));
+        drinks.add(new Drink("Mug Root Beer"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks quality root beer"
+    when
+        Fact(name == "quality_root_beer", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Virgo's Root Beer"));
+        drinks.add(new Drink("Henry Weinhard's Root Beer"));
+        drinks.add(new Drink("Sprecher Root Beer"));
+        drinks.add(new Drink("IBC Root Beer"));
+        drinks.add(new Drink("Thomas Kemper Root Beer"));
+        drinks.add(new Drink("Dr Brown's Root Beer"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks tummy ache"
+    when
+        Fact(name == "tummy_ache", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Guarana Antarctica"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks no HFCS and taste"
+    when
+        Fact(name == "hfcs_and_taste", answer == Answer.NO)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Guarana Antarctica"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks HFCS and taste"
+    when
+        Fact(name == "hfcs_and_taste", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Guarana Antarctica"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks cherry"
+    when
+        Fact(name == "cherry", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Guarana Antarctica"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks no caffeine"
+    when
+        Fact(name == "caffeine", answer == Answer.NO)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Guarana Antarctica"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks backpack"
+    when
+        Fact(name == "backpack", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Guarana Antarctica"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks singing tastebuds"
+    when
+        Fact(name == "singing_tastebuds", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Guarana Antarctica"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks long for simpler days"
+    when
+        Fact(name == "long_for_simpler_days", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Guarana Antarctica"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks no long for simpler days"
+    when
+        Fact(name == "long_for_simpler_days", answer == Answer.NO)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Guarana Antarctica"));
+        drinksApp.presentResults(drinks);
+end
