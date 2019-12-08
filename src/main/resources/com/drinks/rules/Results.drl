@@ -1,0 +1,63 @@
+package com.drinks.rules
+
+import java.util.List;
+import java.util.ArrayList;
+
+// Present results
+rule "Drinks in Mexico"
+    when
+        Fact(name == "in_mexico", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Jarritos"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks PwN nOoBs"
+    when
+        Fact(name == "pwn_noobs", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Mountian Dew Code Red"));
+        drinks.add(new Drink("Bawls Gurana"));
+        drinks.add(new Drink("Jolt Cola"));
+        drinks.add(new Drink("Mello Yello"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks ostentatious"
+    when
+        Fact(name == "ostentatious", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Diet Rite Pure Zero"));
+        drinks.add(new Drink("Zevia"));
+        drinks.add(new Drink("Blue Sky Organic"));
+        drinks.add(new Drink("Hansen's Diet"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks no boost"
+    when
+        Fact(name == "need_a_boost", answer == Answer.NO)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Barq's Diet"));
+        drinks.add(new Drink("Fresca"));
+        drinks.add(new Drink("A&W Diet"));
+        drinks.add(new Drink("7Up Free"));
+        drinks.add(new Drink("Sprite Zero"));
+        drinksApp.presentResults(drinks);
+end
+
+rule "Drinks need a boost"
+    when
+        Fact(name == "need_a_boost", answer == Answer.YES)
+    then
+        List<Object> drinks = new ArrayList<>();
+        drinks.add(new Drink("Coke Diet"));
+        drinks.add(new Drink("Dr Pepper Diet"));
+        drinks.add(new Drink("Pepsi Diet"));
+        drinks.add(new Drink("Coca-Cola Diet"));
+        drinksApp.presentResults(drinks);
+end
