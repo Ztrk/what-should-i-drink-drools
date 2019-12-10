@@ -2,7 +2,6 @@ package com.drinks;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.kie.api.KieBase;
 import org.kie.api.KieServices;
@@ -13,15 +12,18 @@ import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.FactHandle;
 
 import javafx.application.Application;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -34,6 +36,8 @@ public class Drinks extends Application {
     private KieSession kSession;
     private ArrayList<FactHandle> facts = new ArrayList<>();
     private ArrayList<String> toShow = new ArrayList<>();
+    private ArrayList<String> queries = new ArrayList<>();
+    private ArrayList<Object> answers = new ArrayList<>();
     private int winSize=400;
     
     public static final void main(String[] args) {
@@ -41,30 +45,48 @@ public class Drinks extends Application {
     }
 
     @Override
-    public void start(Stage arg0) throws Exception {
+    public void start(Stage primaryStage) throws Exception {
         System.out.println("App started");
-        try {
-            // load up the knowledge base
-            KieServices ks = KieServices.Factory.get();
-            KieContainer kContainer = ks.getKieClasspathContainer();
-            kSession = kContainer.newKieSession("ksession-rules");
-            KieRuntimeLogger kLogger = ks.getLoggers().newFileLogger(kSession, "drinks-log");
+        primaryStage.setTitle("What Should I Drink?");
 
-            // go !
-            kSession.setGlobal("drinksApp", this);
-            kSession.fireAllRules();
-            kLogger.close();
-        }
-        catch (Throwable t) {
-            t.printStackTrace();
-        }
+        GridPane gridPane = new GridPane();
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setVgap(10);
+        ColumnConstraints columnConstraints = new ColumnConstraints();
+        columnConstraints.setHalignment(HPos.CENTER);
+        gridPane.getColumnConstraints().add(columnConstraints);
+
+        Label welcomeText = new Label("Welcome to our application. To start press Start button.");
+        welcomeText.setWrapText(true);
+        gridPane.add(welcomeText, 0, 0);
+        Button startButton = new Button("Start");
+        
+        startButton.setOnAction(event -> {
+            try {
+                // load up the knowledge base
+                KieServices ks = KieServices.Factory.get();
+                KieContainer kContainer = ks.getKieClasspathContainer();
+                kSession = kContainer.newKieSession("ksession-rules");
+                KieRuntimeLogger kLogger = ks.getLoggers().newFileLogger(kSession, "drinks-log");
+
+                // go !
+                kSession.setGlobal("drinksApp", this);
+                kSession.fireAllRules();
+                kLogger.close();
+            }
+            catch (Throwable t) {
+                t.printStackTrace();
+            }
+        });
+        gridPane.add(startButton, 0, 1);
+
+        Scene scene = new Scene(gridPane, 400, 300);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
     }
     
     
-    //ArrayList<FactHandle> facts=new ArrayList<>();
-    //ArrayList<String> toShow=new ArrayList<>();
-    ArrayList<String> queries=new ArrayList<>();
-    ArrayList<Object> answers=new ArrayList<>();
     public void ask(String question, String factName) throws InstantiationException, IllegalAccessException {
         // Basic preprocessing of facts and rules
         KieBase kBase = kSession.getKieBase();
