@@ -165,7 +165,7 @@ rule "Drinks at a picnic"
         Fact(name == "at_a_picnic", answer == Answer.YES)
     then
         List<Object> drinks = new ArrayList<>();
-        drinks.add(new Drink("Contry Time"));
+        drinks.add(new Drink("Country Time"));
         drinks.add(new Drink("Squirt"));
         drinks.add(new Drink("Dad's Root Beer"));
         drinks.add(new Drink("Sunkist"));
@@ -229,7 +229,11 @@ rule "Drinks tummy ache"
         Fact(name == "tummy_ache", answer == Answer.YES)
     then
         List<Object> drinks = new ArrayList<>();
-        drinks.add(new Drink("Guarana Antarctica"));
+        drinks.add(new Drink("Seagram's Ginger Ale"));
+        drinks.add(new Drink("Canada Dry Ginger Ale"));
+        drinks.add(new Drink("Schweppes Dry Ginger Ale"));
+        drinks.add(new Drink("Vernors Dry Ginger Ale"));
+        drinks.add(new Drink("Blenheim Ginger Ale"));
         drinksApp.presentResults(drinks);
 end
 
@@ -238,7 +242,9 @@ rule "Drinks no HFCS and taste"
         Fact(name == "hfcs_and_taste", answer == Answer.NO)
     then
         List<Object> drinks = new ArrayList<>();
-        drinks.add(new Drink("Guarana Antarctica"));
+        drinks.add(new Drink("Pepsi-Cola Throwback"));
+        drinks.add(new Drink("Mountain Dew Throwback"));
+        drinks.add(new Drink("Hansen's Natural Soda"));
         drinksApp.presentResults(drinks);
 end
 
@@ -247,7 +253,9 @@ rule "Drinks HFCS and taste"
         Fact(name == "hfcs_and_taste", answer == Answer.YES)
     then
         List<Object> drinks = new ArrayList<>();
-        drinks.add(new Drink("Guarana Antarctica"));
+        drinks.add(new Drink("Mexican Coca-Cola"));
+        drinks.add(new Drink("Jones Soda"));
+        drinks.add(new Drink("Boylan Soda"));
         drinksApp.presentResults(drinks);
 end
 
@@ -256,7 +264,10 @@ rule "Drinks cherry"
         Fact(name == "cherry", answer == Answer.YES)
     then
         List<Object> drinks = new ArrayList<>();
-        drinks.add(new Drink("Guarana Antarctica"));
+        drinks.add(new Drink("Coca-Cola Cherry"));
+        drinks.add(new Drink("Coca-Cola Black Cherry Vanilla"));
+        drinks.add(new Drink("7up Cherry"));
+        drinks.add(new Drink("Dr Pepper Cherry Vanilla"));
         drinksApp.presentResults(drinks);
 end
 
@@ -265,7 +276,11 @@ rule "Drinks no caffeine"
         Fact(name == "caffeine", answer == Answer.NO)
     then
         List<Object> drinks = new ArrayList<>();
-        drinks.add(new Drink("Guarana Antarctica"));
+        drinks.add(new Drink("Bubble Up"));
+        drinks.add(new Drink("Sprite"));
+        drinks.add(new Drink("Dr Brown's Cel-Ray"));
+        drinks.add(new Drink("Sierra Mist"));
+        drinks.add(new Drink("7up"));
         drinksApp.presentResults(drinks);
 end
 
@@ -274,7 +289,11 @@ rule "Drinks backpack"
         Fact(name == "backpack", answer == Answer.YES)
     then
         List<Object> drinks = new ArrayList<>();
-        drinks.add(new Drink("Guarana Antarctica"));
+        drinks.add(new Drink("Pepsi Blue"));
+        drinks.add(new Drink("Pibb Xtra"));
+        drinks.add(new Drink("A&W Float"));
+        drinks.add(new Drink("Sunkist Float"));
+        drinks.add(new Drink("Mountain Dew"));
         drinksApp.presentResults(drinks);
 end
 
@@ -283,7 +302,7 @@ rule "Drinks singing tastebuds"
         Fact(name == "singing_tastebuds", answer == Answer.YES)
     then
         List<Object> drinks = new ArrayList<>();
-        drinks.add(new Drink("Guarana Antarctica"));
+        drinks.add(new Drink("Stewart's Soda"));
         drinksApp.presentResults(drinks);
 end
 
@@ -292,7 +311,10 @@ rule "Drinks long for simpler days"
         Fact(name == "long_for_simpler_days", answer == Answer.YES)
     then
         List<Object> drinks = new ArrayList<>();
-        drinks.add(new Drink("Guarana Antarctica"));
+        drinks.add(new Drink("Coca-Cola"));
+        drinks.add(new Drink("Nehi Soda"));
+        drinks.add(new Drink("RC Cola"));
+        drinks.add(new Drink("Pepsi"));
         drinksApp.presentResults(drinks);
 end
 
@@ -301,6 +323,8 @@ rule "Drinks no long for simpler days"
         Fact(name == "long_for_simpler_days", answer == Answer.NO)
     then
         List<Object> drinks = new ArrayList<>();
-        drinks.add(new Drink("Guarana Antarctica"));
+        drinks.add(new Drink("Dr Pepper"));
+        drinks.add(new Drink("Vanilla Coke"));
+        drinks.add(new Drink("A&W Cream Soda"));
         drinksApp.presentResults(drinks);
 end
