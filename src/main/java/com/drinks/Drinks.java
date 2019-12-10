@@ -19,9 +19,13 @@ public class Drinks extends Application {
 
     private DrinksView view;
     private KieSession kSession;
+    // List of fact handles
     private ArrayList<FactHandle> facts = new ArrayList<>();
+    // List with strings showed on the list of answers
     private ArrayList<String> toShow = new ArrayList<>();
+    // List with names of facts
     private ArrayList<String> queries = new ArrayList<>();
+    // List with user's answers
     private ArrayList<Object> answers = new ArrayList<>();
 
     public static final void main(String[] args) {
@@ -36,13 +40,19 @@ public class Drinks extends Application {
 
     public void createDroolsSession() {
         try {
-            // load up the knowledge base
+            // Clear lists
+            facts.clear();
+            toShow.clear(); 
+            queries.clear();
+            answers.clear();
+
+            // Load up the knowledge base
             KieServices ks = KieServices.Factory.get();
             KieContainer kContainer = ks.getKieClasspathContainer();
             kSession = kContainer.newKieSession("ksession-rules");
             KieRuntimeLogger kLogger = ks.getLoggers().newFileLogger(kSession, "drinks-log");
 
-            // go !
+            // Fire rules
             kSession.setGlobal("drinksApp", this);
             kSession.fireAllRules();
             kLogger.close();
