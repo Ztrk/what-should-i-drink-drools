@@ -65,7 +65,7 @@ public class Drinks extends Application {
 
     public void ask(String question, String factName) {
         Stage thisStage = view.createQuestionWindow(this, question, factName, toShow);
-        thisStage.showAndWait();
+        thisStage.show();
     }
 
     public void presentResults(List<Object> drinks) {
@@ -83,7 +83,7 @@ public class Drinks extends Application {
         }
 
         Stage thisStage = view.createResultsWindow(this, ancientWisdom.toString(), toShow);
-        thisStage.showAndWait();
+        thisStage.show();
     }
 
     public void handleAnswer(String question, String factName, boolean isYesAnswer, Stage thisStage) {
@@ -119,6 +119,7 @@ public class Drinks extends Application {
         queries.add(factName);
         facts.add(kSession.insert(fact));
         thisStage.close();
+        kSession.fireAllRules();
     }
 
     public void handleReturnButton(ListView<String> answerList, Stage thisStage) {
@@ -134,8 +135,8 @@ public class Drinks extends Application {
             return;
         }
 
-        System.out.println(String.valueOf(facts.size()) + "  " + String.valueOf(queries.size()) + "  "
-                           + String.valueOf(answers.size()) + "  " + String.valueOf(toShow.size()));
+        //System.out.println(String.valueOf(facts.size()) + "  " + String.valueOf(queries.size()) + "  "
+                           //+ String.valueOf(answers.size()) + "  " + String.valueOf(toShow.size()));
         int point = 1, pos;
         if (null != answerList.getSelectionModel().getSelectedItem()) {
             String xstr = answerList.getSelectionModel().getSelectedItem();
@@ -159,6 +160,11 @@ public class Drinks extends Application {
 
             facts.add(kSession.insert(fact));
             thisStage.close();
+            kSession.fireAllRules();
+        }
+        else if (facts.size() == point) {
+            thisStage.close();
+            createDroolsSession();
         }
     }
 
