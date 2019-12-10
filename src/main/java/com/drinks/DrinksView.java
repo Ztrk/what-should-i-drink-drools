@@ -5,7 +5,7 @@ import java.util.List;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -13,14 +13,16 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 public class DrinksView {
 
-    private int winSize = 400;
+    private int winSize;
+    
+    public DrinksView(int windowSize) {
+        winSize = windowSize;
+    }
 
-    public Stage createMainWindow(Drinks controller, Stage primaryStage) {
-        primaryStage.setTitle("What Should I Drink?");
+    public Parent createMainWindow(Drinks controller) {
 
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
@@ -36,14 +38,10 @@ public class DrinksView {
 
         startButton.setOnAction(event -> controller.createDroolsSession());
         gridPane.add(startButton, 0, 1);
-
-        Scene scene = new Scene(gridPane, 400, 300);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-        return primaryStage;
+        return gridPane;
     }
 
-    public Stage createQuestionWindow(Drinks controller, String question, String factName, List<String> previousAnswers) {
+    public Parent createQuestionWindow(Drinks controller, String question, String factName, List<String> previousAnswers) {
         ListView<String> answerList = new ListView<String>();
         Button buttonYes = new Button("Yes");
         Button buttonNo = new Button("No");
@@ -55,11 +53,9 @@ public class DrinksView {
             answerList.getItems().add(s);
         }
 
-        Stage thisStage = new Stage();
-
-        buttonYes.setOnAction(event -> controller.handleAnswer(question, factName, true, thisStage));
-        buttonNo.setOnAction(event -> controller.handleAnswer(question, factName, false, thisStage));
-        buttonReturn.setOnAction(event -> controller.handleReturnButton(answerList, thisStage));
+        buttonYes.setOnAction(event -> controller.handleAnswer(question, factName, true));
+        buttonNo.setOnAction(event -> controller.handleAnswer(question, factName, false));
+        buttonReturn.setOnAction(event -> controller.handleReturnButton(answerList));
 
         // Creating window
         GridPane layout = new GridPane();
@@ -76,13 +72,10 @@ public class DrinksView {
         buttonsBox.setAlignment(Pos.BASELINE_RIGHT);
         layout.add(buttonsBox, 0, 3);
 
-        Scene scene = new Scene(layout, winSize, winSize);
-        thisStage.setTitle("Question");
-        thisStage.setScene(scene);
-        return thisStage;
+        return layout;
     }
 
-    public Stage createResultsWindow(Drinks controller, String results, List<String> previousAnswers) {
+    public Parent createResultsWindow(Drinks controller, String results, List<String> previousAnswers) {
         // Creating buttons, message and list that will be displayed
         ListView<String> answerList = new ListView<String>();
         Button buttonReturn = new Button("Return");
@@ -99,9 +92,7 @@ public class DrinksView {
         message.setWrappingWidth(winSize - 20);
         message2.setWrappingWidth(winSize - 20);
 
-        Stage thisStage = new Stage();
-
-        buttonReturn.setOnAction(event -> controller.handleReturnButton(answerList, thisStage));
+        buttonReturn.setOnAction(event -> controller.handleReturnButton(answerList));
 
         // Creating window
         GridPane layout = new GridPane();
@@ -116,9 +107,6 @@ public class DrinksView {
         layout.add(buttonReturn, 0, 3);
         GridPane.setHalignment(buttonReturn, HPos.RIGHT);
 
-        Scene scene = new Scene(layout, winSize, winSize);
-        thisStage.setTitle("Question");
-        thisStage.setScene(scene);
-        return thisStage;
+        return layout;
     }
 }

@@ -12,12 +12,15 @@ import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.FactHandle;
 
 import javafx.application.Application;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
 public class Drinks extends Application {
 
     private DrinksView view;
+    private Scene primaryScene;
     private KieSession kSession;
     // List of fact handles
     private ArrayList<FactHandle> facts = new ArrayList<>();
@@ -34,8 +37,12 @@ public class Drinks extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        view = new DrinksView();
-        view.createMainWindow(this, primaryStage);
+        int windowSize = 400;
+        view = new DrinksView(windowSize);
+        primaryScene = new Scene(view.createMainWindow(this), windowSize, windowSize);
+        primaryStage.setTitle("What Should I Drink?");
+        primaryStage.setScene(primaryScene);
+        primaryStage.show();
     }
 
     public void createDroolsSession() {
@@ -64,8 +71,8 @@ public class Drinks extends Application {
     }
 
     public void ask(String question, String factName) {
-        Stage thisStage = view.createQuestionWindow(this, question, factName, toShow);
-        thisStage.show();
+        Parent root = view.createQuestionWindow(this, question, factName, toShow);
+        primaryScene.setRoot(root);
     }
 
     public void presentResults(List<Object> drinks) {
@@ -82,11 +89,11 @@ public class Drinks extends Application {
             }
         }
 
-        Stage thisStage = view.createResultsWindow(this, ancientWisdom.toString(), toShow);
-        thisStage.show();
+        Parent root = view.createResultsWindow(this, ancientWisdom.toString(), toShow);
+        primaryScene.setRoot(root);
     }
 
-    public void handleAnswer(String question, String factName, boolean isYesAnswer, Stage thisStage) {
+    public void handleAnswer(String question, String factName, boolean isYesAnswer) {
         KieBase kBase = kSession.getKieBase();
         FactType answerEnum = kBase.getFactType("com.drinks.rules", "Answer");
         Class<? extends Enum> answerClass = answerEnum.getFactClass().asSubclass(Enum.class);
@@ -118,11 +125,10 @@ public class Drinks extends Application {
 
         queries.add(factName);
         facts.add(kSession.insert(fact));
-        thisStage.close();
         kSession.fireAllRules();
     }
 
-    public void handleReturnButton(ListView<String> answerList, Stage thisStage) {
+    public void handleReturnButton(ListView<String> answerList) {
         KieBase kBase = kSession.getKieBase();
         FactType factType = kBase.getFactType("com.drinks.rules", "Fact");
         Object fact;
@@ -159,11 +165,9 @@ public class Drinks extends Application {
             factType.set(fact, "answer", answers.get(answers.size() - 1));
 
             facts.add(kSession.insert(fact));
-            thisStage.close();
             kSession.fireAllRules();
         }
         else if (facts.size() == point) {
-            thisStage.close();
             createDroolsSession();
         }
     }
