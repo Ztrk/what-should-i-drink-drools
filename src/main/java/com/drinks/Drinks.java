@@ -112,19 +112,6 @@ public class Drinks extends Application {
         	answerList.getItems().add(x);
         }
         
-        //Changing positions, where things will be displayed
-        buttonYes.setTranslateX(-60);
-        buttonNo.setTranslateX(-20);
-        buttonReturn.setTranslateX(30);
-        buttonYes.setTranslateY(140);
-        buttonNo.setTranslateY(140);
-        buttonReturn.setTranslateY(140);
-        message.setTranslateY(50);
-        message2.setTranslateY(-170);
-        answerList.setTranslateY(-50);
-        answerList.setMaxWidth(winSize);
-        answerList.setMaxHeight(160);
-        
         Stage thisStage=new Stage();
         //Events when firing buttons: yes and no
         buttonYes.setOnAction(new EventHandler<ActionEvent>() {
@@ -183,16 +170,23 @@ public class Drinks extends Application {
         
         
         //Creating window
-        StackPane layout=new StackPane();
-        layout.getChildren().add(buttonYes);
-        layout.getChildren().add(buttonNo);
-        layout.getChildren().add(buttonReturn);
-        layout.getChildren().add(message);
-        layout.getChildren().add(message2);
-        layout.getChildren().add(answerList);
-        Scene skene=new Scene(layout, winSize, winSize);
+        GridPane layout = new GridPane();
+        layout.setAlignment(Pos.CENTER);
+        layout.setVgap(10);
+        layout.setHgap(10);
+        layout.setPadding(new Insets(20));
+
+        layout.add(message2, 0, 0);
+        layout.add(answerList, 0, 1);
+        layout.add(message, 0, 2);
+        
+        HBox buttonsBox = new HBox(10, buttonYes, buttonNo, buttonReturn);
+        buttonsBox.setAlignment(Pos.BASELINE_RIGHT);
+        layout.add(buttonsBox, 0, 3);
+
+        Scene scene = new Scene(layout, winSize, winSize);
         thisStage.setTitle("Question");
-        thisStage.setScene(skene);
+        thisStage.setScene(scene);
         //Waiting for player's (?) move
         thisStage.showAndWait();
     }
@@ -224,16 +218,6 @@ public class Drinks extends Application {
         for (String x: toShow) {
         	answerList.getItems().add(x);
         }
-        
-        //Changing positions, where things will be displayed
-        buttonReturn.setTranslateY(140);
-        message.setTranslateY(70);
-        message2.setTranslateY(-160);
-        answerList.setTranslateY(-50);
-        message.setTranslateX(20);
-        message2.setTranslateX(20);
-        answerList.setMaxWidth(winSize);
-        answerList.setMaxHeight(160);
         
         message.setWrappingWidth(winSize-20);
         message2.setWrappingWidth(winSize-20);
@@ -273,14 +257,21 @@ public class Drinks extends Application {
         
         
         //Creating window
-        StackPane layout=new StackPane();
-        layout.getChildren().add(buttonReturn);
-        layout.getChildren().add(message);
-        layout.getChildren().add(message2);
-        layout.getChildren().add(answerList);
-        Scene skene=new Scene(layout, winSize, winSize);
+        GridPane layout=new GridPane();
+        layout.setAlignment(Pos.CENTER);
+        layout.setVgap(10);
+        layout.setHgap(10);
+        layout.setPadding(new Insets(20));
+
+        layout.add(message2, 0, 0);
+        layout.add(answerList, 0, 1);
+        layout.add(message, 0, 2);
+        layout.add(buttonReturn, 0, 3);
+        GridPane.setHalignment(buttonReturn, HPos.RIGHT);
+
+        Scene scene=new Scene(layout, winSize, winSize);
         thisStage.setTitle("Question");
-        thisStage.setScene(skene);
+        thisStage.setScene(scene);
         //Waiting for player's (?) move
         thisStage.showAndWait();
     }
