@@ -79,6 +79,7 @@ public class DrinksView {
         // Creating buttons, message and list that will be displayed
         ListView<String> answerList = new ListView<String>();
         Button buttonReturn = new Button("Return");
+        Button buttonOK = new Button("OK");
         Text message2 = new Text("Answers up to now. If you want to return to the last question, just press Return."
                                   + " If you want to return to even earlier question, click on it on the list and then press Return");
 
@@ -93,6 +94,7 @@ public class DrinksView {
         message2.setWrappingWidth(winSize - 20);
 
         buttonReturn.setOnAction(event -> controller.handleReturnButton(answerList));
+        buttonOK.setOnAction(event -> controller.handleReturnToStart());
 
         // Creating window
         GridPane layout = new GridPane();
@@ -104,8 +106,10 @@ public class DrinksView {
         layout.add(message2, 0, 0);
         layout.add(answerList, 0, 1);
         layout.add(message, 0, 2);
-        layout.add(buttonReturn, 0, 3);
-        GridPane.setHalignment(buttonReturn, HPos.RIGHT);
+        
+        HBox buttonBox = new HBox(10, buttonOK, buttonReturn);
+        buttonBox.setAlignment(Pos.BASELINE_RIGHT);
+        layout.add(buttonBox, 0, 3);
 
         return layout;
     }

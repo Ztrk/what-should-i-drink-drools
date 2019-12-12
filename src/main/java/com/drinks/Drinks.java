@@ -171,5 +171,10 @@ public class Drinks extends Application {
             createDroolsSession();
         }
     }
+    
+    public void handleReturnToStart() {
+        Parent root = view.createMainWindow(this);
+        primaryScene.setRoot(root);
+    }
 
 }
