@@ -75,8 +75,8 @@ public class Drinks extends Application {
         primaryScene.setRoot(root);
     }
 
+    //Creating string of results
     public void presentResults(List<Object> drinks) {
-        // Basic preprocessing of facts and rules
         KieBase kBase = kSession.getKieBase();
         FactType drinkType = kBase.getFactType("com.drinks.rules", "Drink");
 
@@ -99,7 +99,7 @@ public class Drinks extends Application {
         Class<? extends Enum> answerClass = answerEnum.getFactClass().asSubclass(Enum.class);
         Object yesAnswer = Enum.valueOf(answerClass, "YES");
         Object noAnswer = Enum.valueOf(answerClass, "NO");
-
+        //Creating new fact
         FactType factType = kBase.getFactType("com.drinks.rules", "Fact");
         Object fact;
         try {
@@ -110,7 +110,7 @@ public class Drinks extends Application {
             e.printStackTrace();
             return;
         }
-
+        //Setting fact
         factType.set(fact, "name", factName);
         if (isYesAnswer) {
             factType.set(fact, "answer", yesAnswer);
@@ -122,7 +122,7 @@ public class Drinks extends Application {
             answers.add(noAnswer);
             toShow.add(question + ", Answer: No");
         }
-
+        //Adding fact to session, firing rules
         queries.add(factName);
         facts.add(kSession.insert(fact));
         kSession.fireAllRules();
@@ -143,12 +143,14 @@ public class Drinks extends Application {
 
         //System.out.println(String.valueOf(facts.size()) + "  " + String.valueOf(queries.size()) + "  "
                            //+ String.valueOf(answers.size()) + "  " + String.valueOf(toShow.size()));
+        //Checking which element in list was selected
         int point = 1, pos;
         if (null != answerList.getSelectionModel().getSelectedItem()) {
             String xstr = answerList.getSelectionModel().getSelectedItem();
             pos = toShow.indexOf(xstr);
             point = facts.size() - pos;
         }
+        //Removing facts up to a point specified in return, adding last not removed fact to fire rules
         if (facts.size() > point) {
 
             for (int i = 0; i < point; i++) {
@@ -167,11 +169,12 @@ public class Drinks extends Application {
             facts.add(kSession.insert(fact));
             kSession.fireAllRules();
         }
+        //Creating new session if return to first question
         else if (facts.size() == point) {
             createDroolsSession();
         }
     }
-    
+    //Coming back to start window
     public void handleReturnToStart() {
         Parent root = view.createMainWindow(this);
         primaryScene.setRoot(root);

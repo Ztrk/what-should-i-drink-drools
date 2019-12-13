@@ -35,7 +35,7 @@ public class DrinksView {
         welcomeText.setWrapText(true);
         gridPane.add(welcomeText, 0, 0);
         Button startButton = new Button("Start");
-
+        //Adding controls for buttons
         startButton.setOnAction(event -> controller.createDroolsSession());
         gridPane.add(startButton, 0, 1);
         return gridPane;
@@ -52,7 +52,11 @@ public class DrinksView {
         for (String s : previousAnswers) {
             answerList.getItems().add(s);
         }
-
+        
+        //Text wrapping determines the layout with gridpane
+        message.setWrappingWidth(winSize - 20);
+        message2.setWrappingWidth(winSize - 20);
+        //Adding controls for buttons
         buttonYes.setOnAction(event -> controller.handleAnswer(question, factName, true));
         buttonNo.setOnAction(event -> controller.handleAnswer(question, factName, false));
         buttonReturn.setOnAction(event -> controller.handleReturnButton(answerList));
@@ -89,10 +93,11 @@ public class DrinksView {
         for (String s : previousAnswers) {
             answerList.getItems().add(s);
         }
-
+        
+        //determining layout look
         message.setWrappingWidth(winSize - 20);
         message2.setWrappingWidth(winSize - 20);
-
+        //adding controls for buttons
         buttonReturn.setOnAction(event -> controller.handleReturnButton(answerList));
         buttonOK.setOnAction(event -> controller.handleReturnToStart());
 
