@@ -13,7 +13,7 @@
   <description>A student project in expert systems</description>
 
   <properties>
-    <runtime.version>7.30.0.Final</runtime.version>
+    <runtime.version>7.69.0.Final</runtime.version>
     <maven.compiler.release>11</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
